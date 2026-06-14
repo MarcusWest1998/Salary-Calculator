@@ -125,23 +125,36 @@
         const nightShiftHours = parseFloat(nightShiftInput.value) || 0;
         const overtimeHolidayHours =
           parseFloat(overtimeHolidayInput.value) || 0;
-        const otherBenefits =
-          parseFloat(otherBenefitsInput.value) || 0;
+        const otherBenefits = parseFloat(otherBenefitsInput.value) || 0;
         const netto =
           brutto +
           nightShiftHours * ((brutto / 160) * 0.1) +
           overtimeHolidayHours * ((brutto / 160) * 1) +
           otherBenefits;
 
-        // Czech total standard tax rate is 23%
-        const taxAmount = netto * 0.23;
-        const netSalary = netto - taxAmount;
+        const totalBrutto =
+          brutto +
+          nightShiftHours * ((brutto / 160) * 0.1) +
+          overtimeHolidayHours * ((brutto / 160) * 1); // 1 = 100% bonus
+
+        const socialSecurity = totalBrutto * 0.071; // 7.1%
+        const healthInsurance = totalBrutto * 0.045; // 4.5%
+
+        let incomeTax = totalBrutto * 0.15 - 2570; //
+        if (incomeTax < 0) {
+          incomeTax = 0;
+        }
+
+        const totalTaxAndContributions =
+          socialSecurity + healthInsurance + incomeTax;
+
+        const netSalary =
+          totalBrutto - totalTaxAndContributions + otherBenefits;
 
         document.getElementById("tax-amount").textContent =
-          taxAmount.toFixed(2) + " CZK";
+          totalTaxAndContributions.toFixed(2) + " CZK";
         document.getElementById("net-salary").textContent =
           netSalary.toFixed(2) + " CZK";
-      }
     </script>
   </body>
 </html>
