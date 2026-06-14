@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salary Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .app-box {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+      }
+      h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #555;
+      }
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-top: 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+
+      .titel-resultat {
+        margin-top: 15px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #777;
+      }
+      .resultat {
+        padding: 12px;
+        border-radius: 4px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 5px;
+      }
+      .udbetalt-boks {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .skat-boks {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-box">
+      <h2>Salary Calculator</h2>
+      <label for="brutto">Brutto Salary (CZK):</label>
+      <input type="number" id="brutto" placeholder="Enter your brutto salary" />
+
+      <label for="night-shift-hours">Night Shift (Hours):</label>
+      <input
+        type="number"
+        id="night-shift-hours"
+        placeholder="Enter night shift hours"
+      />
+
+      <label for="overtime-holiday">Overtime / Holiday (Hours):</label>
+      <input
+        type="number"
+        id="overtime-holiday"
+        placeholder="Enter overtime/holiday hours"
+      />
+
+      <label for="other-benefits">Other Benefits (CZK):</label>
+      <input
+        type="number"
+        id="other-benefits"
+        placeholder="Enter other benefits"
+      />
+
+      <button onclick="calculateNetSalary()">Calculate</button>
+
+      <div class="titel-resultat">Tax Amount:</div>
+      <div id="tax-amount" class="resultat skat-boks">0 CZK</div>
+
+      <div class="titel-resultat">Net Salary:</div>
+      <div id="net-salary" class="resultat udbetalt-boks">0 CZK</div>
+    </div>
+
+    <script>
+      function calculateNetSalary() {
+        const bruttoInput = document.getElementById("brutto");
+        const nightShiftInput = document.getElementById("night-shift-hours");
+        const overtimeHolidayInput =
+          document.getElementById("overtime-holiday");
+        const otherBenefitsInput = document.getElementById("other-benefits");
+        const brutto = parseFloat(bruttoInput.value) || 0;
+        const nightShiftHours = parseFloat(nightShiftInput.value) || 0;
+        const overtimeHolidayHours =
+          parseFloat(overtimeHolidayInput.value) || 0;
+        const otherBenefits =
+          parseFloat(otherBenefitsInput.value) || 0;
+        const netto =
+          brutto +
+          nightShiftHours * ((brutto / 160) * 0.1) +
+          overtimeHolidayHours * ((brutto / 160) * 1) +
+          otherBenefits;
+
+        // Czech total standard tax rate is 23%
+        const taxAmount = netto * 0.23;
+        const netSalary = netto - taxAmount;
+
+        document.getElementById("tax-amount").textContent =
+          taxAmount.toFixed(2) + " CZK";
+        document.getElementById("net-salary").textContent =
+          netSalary.toFixed(2) + " CZK";
+      }
+    </script>
+  </body>
+</html>
